@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ה-AI האישי שלי</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+        #result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h3>שאלה ל-AI:</h3>
+    <textarea id="prompt" placeholder="מה לשאול את ה-AI?"></textarea>
+    <br>
+    <button onclick="askAI()">שלח</button>
+    <div id="result">ממתין לשאלה...</div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+        
+        window.askAI = async () => {
+            const resultDiv = document.getElementById("result");
+            const prompt = document.getElementById("prompt").value;
+            
+            if(!prompt) return alert("נא לכתוב שאלה");
+            
+            resultDiv.innerText = "חושב...";
+            
+            try {
+                // שים כאן את המפתח החדש שיצרת (במקום הטקסט למטה)
+                const genAI = new GoogleGenerativeAI("הדבק_כאן_את_המפתח_החדש_שלךAIzaSyBGjol2K4pXcRhjsddMBBz92HLylEUOogs");
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                
+                const result = await model.generateContent(prompt);
+                resultDiv.innerText = result.response.text();
+            } catch (error) {
+                resultDiv.innerText = "שגיאה: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
